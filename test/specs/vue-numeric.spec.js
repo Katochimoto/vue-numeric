@@ -109,6 +109,28 @@ describe('vue-numeric.vue', () => {
     })
   })
 
+  it('is is not disabled when disabled mode is disabled', done => {
+    const propsData = { value: 3000, disabled: true }
+    const wrapper = mount(VueNumeric, { propsData })
+
+    wrapper.setProps({ disabled: false })
+    wrapper.instance().$nextTick(() => {
+      expect(wrapper.instance().$el.hasAttribute('disabled')).to.equal(false)
+      done()
+    })
+  })
+
+  it('is disabled in disabled mode', done => {
+    const propsData = { value: 3000, disabled: false }
+    const wrapper = mount(VueNumeric, { propsData })
+
+    wrapper.setProps({ disabled: true })
+    wrapper.instance().$nextTick(() => {
+      expect(wrapper.instance().$el.hasAttribute('disabled')).to.equal(true)
+      done()
+    })
+  });
+
   it('cannot exceed max props', () => {
     const component = Vue.extend({
       data: () => ({ total: 150 }),
@@ -219,9 +241,14 @@ describe('vue-numeric.vue', () => {
     expect(process.called).to.equal(true)
   })
 
-  it('does not show default value when placeholder if defined', () => {
-    const wrapper = mount(VueNumeric, { propsData: { value: 2000, placeholder: 'number here' }})
+  it('does not show default value when placeholder if defined and input is empty', () => {
+    const wrapper = mount(VueNumeric, { propsData: { value: '', placeholder: 'number here' }})
     expect(wrapper.data().amount).to.equal('')
+  })
+
+  it('ignore placeholder when input is not empty', () => {
+    const wrapper = mount(VueNumeric, { propsData: { value: 2000, placeholder: 'number here' }})
+    expect(wrapper.data().amount).to.equal('2,000')
   })
 
   it('sets the value to 0 when no empty value is provided and input is empty', () => {

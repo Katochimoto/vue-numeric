@@ -7,12 +7,9 @@
     ref="numeric"
     type="tel"
     v-model="amount"
-    v-if="!readOnly"
-  >
-  <span
-    v-else
-    ref="readOnly"
-  >{{ amount }}</span>
+    :disabled="disabled"
+    :readonly="readOnly"
+  />
 </template>
 
 <script>
@@ -131,8 +128,14 @@ export default {
      */
     value: {
       type: [Number, String],
-      default: 0,
-      required: true
+      default: '',
+      required: true,
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
 
     /**
@@ -228,19 +231,6 @@ export default {
     },
 
     /**
-     * When readOnly is true, replace the span tag class.
-     * @param {Boolean} newValue
-     * @param {Boolean} oldValue
-     */
-    readOnly (newValue, oldValue) {
-      if (oldValue === false && newValue === true) {
-        this.$nextTick(() => {
-          this.$refs.readOnly.className = this.readOnlyClass
-        })
-      }
-    },
-
-    /**
      * Immediately reflect separator changes
      */
     separator () {
@@ -267,7 +257,7 @@ export default {
 
   mounted () {
     // Set default value props when placeholder undefined.
-    if (!this.placeholder) {
+    if (!this.placeholder || this.value !== '') {
       this.process(this.valueNumber)
       this.amount = this.format(this.valueNumber)
 
@@ -277,9 +267,6 @@ export default {
         this.amount = this.format(this.valueNumber)
       }, 500)
     }
-
-    // Set read-only span element's class
-    if (this.readOnly) this.$refs.readOnly.className = this.readOnlyClass
   },
 
   methods: {
