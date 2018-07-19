@@ -276,7 +276,10 @@ export default {
      */
     onBlurHandler (e) {
       this.$emit('blur', e)
-      this.amount = this.format(this.valueNumber)
+
+      if (!this.readOnly && !this.disabled) {
+        this.amount = this.format(this.valueNumber)
+      }
     },
 
     /**
@@ -285,6 +288,11 @@ export default {
      */
     onFocusHandler (e) {
       this.$emit('focus', e)
+
+      if (this.readOnly || this.disabled) {
+        return
+      }
+
       if (this.valueNumber === 0) {
         this.amount = null
       } else {
