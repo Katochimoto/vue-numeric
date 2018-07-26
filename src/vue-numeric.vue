@@ -23,7 +23,7 @@ export default {
      * Currency symbol.
      */
     currency: {
-      type: String,
+      type: [String, Function],
       default: '',
       required: false
     },
@@ -341,7 +341,7 @@ export default {
      */
     format (value) {
       return accounting.formatMoney(value, {
-        symbol: this.currency,
+        symbol: typeof this.currency === 'function' ? this.currency(value) : this.currency,
         format: this.symbolPosition,
         precision: Number(this.precision),
         decimal: this.decimalSeparatorSymbol,
