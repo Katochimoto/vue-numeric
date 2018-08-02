@@ -256,17 +256,16 @@ export default {
   },
 
   mounted () {
-    // Set default value props when placeholder undefined.
-    if (!this.placeholder || this.value !== '') {
-      this.process(this.valueNumber)
-      this.amount = this.format(this.valueNumber)
-
-      // In case of delayed props value.
-      setTimeout(() => {
-        this.process(this.valueNumber)
-        this.amount = this.format(this.valueNumber)
-      }, 500)
+    if (this.placeholder) {
+      return
     }
+
+    if (this.value === '' || this.value === null || this.value === undefined) {
+      return
+    }
+
+    this.process(this.valueNumber)
+    this.amount = this.format(this.valueNumber)
   },
 
   methods: {
