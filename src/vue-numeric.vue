@@ -256,16 +256,10 @@ export default {
   },
 
   mounted () {
-    if (this.placeholder) {
-      return
+    if (String(this.value)) {
+      this.process(this.valueNumber)
+      this.amount = this.format(this.valueNumber)
     }
-
-    if (this.value === '' || this.value === null || this.value === undefined) {
-      return
-    }
-
-    this.process(this.valueNumber)
-    this.amount = this.format(this.valueNumber)
   },
 
   methods: {
